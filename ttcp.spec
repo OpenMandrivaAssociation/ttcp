@@ -11,7 +11,6 @@ Source2: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.README.bz2
 Summary: A tool for testing TCP connections
 Group: Monitoring
 License: Public Domain
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 %description
 ttcp is a tool for testing the throughput of TCP connections. Unlike
