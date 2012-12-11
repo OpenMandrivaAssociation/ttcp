@@ -1,49 +1,42 @@
-%define name	ttcp
-%define version	1.12
-%define rel	4
-
-Name: %{name}
-Version: %{version}
-Release: %mkrel %{rel}
-Source0: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.c.bz2
-Source1: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.1.bz2
-Source2: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.README.bz2
 Summary: A tool for testing TCP connections
+Name: ttcp
+Version: 1.12
+Release: 15
+URL:	ftp://ftp.sgi.com/sgi/src/ttcp/
+Source0: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.c
+Source1: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.1
+Source2: ftp://ftp.sgi.com/sgi/src/ttcp/README
+Patch0: ttcp-big.patch
+Patch1: ttcp-malloc.patch
+Patch2: ttcp-GNU.patch
+Patch3: ttcp-man.patch
+BuildRequires: glibc-devel
 Group: Monitoring
 License: Public Domain
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 %description
-ttcp is a tool for testing the throughput of TCP connections. Unlike
-other tools which might be used for this purpose (such as FTP
-clients), ttcp does not read or write data from or to a disk while
-operating, which helps ensure more accurate results.
+ttcp is a tool for testing the throughput of TCP connections.  Unlike other
+tools which might be used for this purpose (such as FTP clients), ttcp does
+not read or write data from or to a disk while operating, which helps ensure
+more accurate results.
 
 %prep
-%setup -c -T
-
-bzcat %{SOURCE0} > ttcp.c
-bzcat %{SOURCE1} > ttcp.1
-bzcat %{SOURCE2} > README
-chmod 644 *
+%setup -c -T -q
+cp -a %{SOURCE0} %{SOURCE1} %{SOURCE2} .
+%patch0 -p1 -b .big
+%patch1 -p1 -b .malloc
+%patch2 -p1 -b .GNU
+%patch3 -p1 -b .man
 
 %build
-%{__cc} $RPM_OPT_FLAGS -o ttcp ttcp.c
+%{__cc} -o ttcp $RPM_OPT_FLAGS ttcp.c
 
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT%_bindir \
-	$RPM_BUILD_ROOT%_mandir/man1
-install -m 755 ttcp $RPM_BUILD_ROOT%_bindir
-install -m 644 ttcp.1 $RPM_BUILD_ROOT%_mandir/man1
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+mkdir -p %{buildroot}{%{_mandir}/man1,%{_bindir}}
+install -p -m755 ttcp %{buildroot}%{_bindir}
+install -p -m644 ttcp.1 %{buildroot}%{_mandir}/man1
 
 %files
-%defattr(-,root,root)
 %doc README
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_mandir}/*/*
-
-
+%{_bindir}/ttcp
+%{_mandir}/man1/ttcp.1*
