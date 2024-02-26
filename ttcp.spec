@@ -1,7 +1,7 @@
 Summary: A tool for testing TCP connections
 Name: ttcp
-Version: 1.12
-Release: 16
+Version: 1.13
+Release: 1
 URL:	ftp://ftp.sgi.com/sgi/src/ttcp/
 Source0: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.c
 Source1: ftp://ftp.sgi.com/sgi/src/ttcp/ttcp.1
